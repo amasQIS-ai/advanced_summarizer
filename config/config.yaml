@@ -1,0 +1,36 @@
+cookie:
+  expiry_days: 1
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    amasqis:
+      email: amasqis.ai@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: amasqis
+      password: $2b$12$/AMwqXCxeRsFANU.k9PNSOBbYGxK.v13nafVr5bZoCITS068e/x7e
+      roles:
+      - admin
+      - editor
+      - viewer
+    vicky:
+      email: itzmevickasay111@gmail.com
+      first_name: Vignesh
+      last_name: Mohana Sundharam
+      logged_in: false
+      password: $2b$12$5u2Qp3alpGpBreNXkpIv7epynBXnvuYI8xf5cnvRvhXHDbMDtKku2
+      password_hint: Vicky@111
+      roles: admin
+oauth2:
+  google:
+    client_id: null
+    client_secret: null
+    redirect_uri: null
+  microsoft:
+    client_id: null
+    client_secret: null
+    redirect_uri: null
+    tenant_id: null
+pre-authorized:
+  emails: []
