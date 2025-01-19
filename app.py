@@ -21,9 +21,9 @@ os.environ["STREAMLIT_SERVER_MAX_UPLOAD_SIZE"]="15"
 #    (We use wide layout + custom page title/icon)
 # ==============================================================
 st.set_page_config(
-    page_title="Advanced Summarizer",
+    page_title="SummarizeIQ",
     page_icon="📄",
-    layout="wide"
+    layout="centered"
 )
 
 # ==============================================================
@@ -45,13 +45,26 @@ def apply_custom_css():
             width: 80px; /* control the size of the logo here */
             height: auto;
         }
+        .p {
+            font-color: Green;
+            }
         </style>
         """,
         unsafe_allow_html=True
     )
 
 apply_custom_css()
-
+with open("assets/logo.png", "rb") as f:
+    logo_data = f.read()
+logo_base64 = base64.b64encode(logo_data).decode("utf-8")
+st.markdown(
+        f"""
+        <div class="logo-container">
+            <img src="data:image/png;base64,{logo_base64}" alt="Logo">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 # ==============================================================
 # 3. LOAD AUTHENTICATOR CONFIG
 #    Make sure config/config.yaml exists and is valid
@@ -85,22 +98,22 @@ if st.session_state.get('authentication_status'):
     # -----------------------------
     
     # We create a simple literal type for doc_type (optional)
-    DocumentType = Literal["research_paper", "literature_review", "report"]
+    DocumentType = Literal["Research paper", "Literature Review", "Report"]
 
-    # Add a responsive logo at the top (already in custom CSS)
-    with open("assets/logo.png", "rb") as f:
-        logo_data = f.read()
-    logo_base64 = base64.b64encode(logo_data).decode("utf-8")
-    st.markdown(
-        f"""
-        <div class="logo-container">
-            <img src="data:image/png;base64,{logo_base64}" alt="Logo">
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    # # Add a responsive logo at the top (already in custom CSS)
+    # with open("assets/logo.png", "rb") as f:
+    #     logo_data = f.read()
+    # logo_base64 = base64.b64encode(logo_data).decode("utf-8")
+    # st.markdown(
+    #     f"""
+    #     <div class="logo-container">
+    #         <img src="data:image/png;base64,{logo_base64}" alt="Logo">
+    #     </div>
+    #     """,
+    #     unsafe_allow_html=True
+    # )
 
-    st.title("Summarizer App")
+    st.title("SummarizeIQ")
     st.write(
         """
         This application summarizes PDF content or URLs (webpages, articles, etc.).
@@ -179,11 +192,16 @@ if st.session_state.get('authentication_status'):
     # -------------------------------------
     with tab1:
         st.subheader("Upload and Summarize a PDF")
+        st.success(""" 
+                    Recommended:
+                    1. Please upload a PDF file (maximum size: 15 MB).
+                    2. For optimal results, upload a PDF with 30 pages or fewer.
+                    """ )
 
         # Select the document type
         doc_type: DocumentType = st.selectbox(
             "Select Document Type",
-            ("research_paper", "literature_review", "report"),
+            ("Research paper", "Literature Review", "Report"),
             index=0
         )
 
@@ -220,20 +238,20 @@ if st.session_state.get('authentication_status'):
                             )
 
                             # Use the appropriate prompts
-                            if doc_type == "research_paper":
+                            if doc_type == "Research paper":
                                 assitant_prompt_part = types.Part.from_text(text=prompts.research_paper_prompt)
 
                                 completion_string = summarize_common(
                                     system_prompt=prompts.system_prompt.format(document_name=doc_type),
                                     parts=[assitant_prompt_part, document_part]
                                 )
-                            elif doc_type == "literature_review":
+                            elif doc_type == "Literature Review":
                                 assitant_prompt_part = types.Part.from_text(text=prompts.literature_review_prompt)
                                 completion_string = summarize_common(
                                     system_prompt=prompts.system_prompt.format(document_name=doc_type),
                                     parts=[assitant_prompt_part, document_part]
                                 )
-                            else:  # "report"
+                            else:  # "Report"
                                 assitant_prompt_part = types.Part.from_text(text=prompts.report_prompt)
                                 completion_string = summarize_common(
                                     system_prompt=prompts.system_prompt.format(document_name=doc_type),
@@ -242,8 +260,8 @@ if st.session_state.get('authentication_status'):
 
                             # Display the summarized content
                             st.success("Summary generated successfully!")
-                            st.write(completion_string)  # Using st.write
-
+                            st.write(completion_string)  
+                            st.download_button(f"Download {doc_type} Summary", completion_string, file_name=f"{doc_type}.md")
                         except Exception as e:
                             st.error(f"An error occurred")
                             traceback.print_exc()
@@ -276,11 +294,12 @@ if st.session_state.get('authentication_status'):
 
                         st.success("Summary generated successfully!")
                         st.write(completion_string)
+                        st.download_button("Download Article Summary", completion_string, file_name="Article summary.txt")
                     else:
                         st.error("No valid data found.")
 
                 except Exception as e:
-                    st.error(f"An error occurred")
+                    st.error(f"An error occurred. Try a different URL.")
                     traceback.print_exc()
 
 # ==============================================================
@@ -288,3 +307,24 @@ if st.session_state.get('authentication_status'):
 # ==============================================================
 elif st.session_state.get('authentication_status') is False:
     st.error('Username/password is incorrect')
+
+
+
+# # ==============================================================
+# # 6. IF NOT AUTHENTICATED, SHOW ERRORS / PROMPT FOR CREDENTIALS
+# # ==============================================================
+# elif st.session_state.get('authentication_status') is False:
+#     st.error('Username/password is incorrect')
+
+# elif st.session_state.get('authentication_status') is None:
+#     st.warning('Please enter your username and password')
+#     try:
+#         # Register new user if pre-authorized (Optional, depends on your config)
+#         email_of_registered_user, username_of_registered_user, name_of_registered_user = \
+#             authenticator.register_user(pre_authorized=config['pre-authorized']['emails'])
+#         if email_of_registered_user:
+#             st.success('User registered successfully')
+#         with open('config/config.yaml', 'w') as file:
+#             yaml.dump(config, file, default_flow_style=False)
+#     except Exception as e:
+#         st.error(e)

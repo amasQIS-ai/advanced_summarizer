@@ -14,6 +14,30 @@ credentials:
       - admin
       - editor
       - viewer
+    amasqis_admin:
+      email: admin@amasqis.ai
+      first_name: amasQIS
+      last_name: Admin
+      logged_in: false
+      password: $2b$12$yiaRV3e4NMIM/bDfeT2QG.cbMiX0GSQuMgqe4tinTB6eGBiZvJnOa
+      password_hint: Admin
+      roles: admin
+    mayilvelnathan:
+      email: support@amasqis.ai
+      first_name: Dr. Mayilvelnathan
+      last_name: Vivekananthan
+      logged_in: false
+      password: $2b$12$CAHutHEwLghItaT0BxzCyO8wVUzwrw4UJ4IFJexSSk9GTFq/0rfOW
+      password_hint: 123@Mayil
+      roles: viewer
+    oia:
+      email: info@amasqis.ai
+      first_name: OIA
+      last_name: Oman Investment Authority
+      logged_in: false
+      password: $2b$12$Dp6T0obLpf2SdX14JnhqfeDVWPkkBvqB/4ROk9j4l9Rw3Q.EcsoPO
+      password_hint: 123@OIA
+      roles: viewer
     vicky:
       email: itzmevickasay111@gmail.com
       first_name: Vignesh
@@ -22,6 +46,14 @@ credentials:
       password: $2b$12$5u2Qp3alpGpBreNXkpIv7epynBXnvuYI8xf5cnvRvhXHDbMDtKku2
       password_hint: Vicky@111
       roles: admin
+    vit_bhopal:
+      email: vicky@amasqis.ai
+      first_name: VIT
+      last_name: Bhopal
+      logged_in: false
+      password: $2b$12$FZw6d.wFV.XWbVC4V7UQHegEb.0mgW7XtNexs77qJ4tsxa.knt/OK
+      password_hint: 123@VITBhopal
+      roles: viewer
 oauth2:
   google:
     client_id: null
