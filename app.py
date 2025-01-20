@@ -265,7 +265,7 @@ with tab2:
 
                     st.success("Summary generated successfully!")
                     st.write(completion_string)
-                    st.download_button("Download Article Summary", completion_string, file_name="Article summary.txt")
+                    st.download_button("Download Article Summary", completion_string, file_name="Article summary.md")
                 else:
                     st.error("No valid data found.")
 
